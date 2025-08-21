@@ -17,7 +17,7 @@ public class OpenAPIConfig {
         devServer.setDescription("Local Development Server User Management API");
 
         Info info = new Info()
-                .title("User Management API")
+                .title("Test User Management API")
                 .version("1.0")
                 .description("This API exposes endpoints to manage users.");
 

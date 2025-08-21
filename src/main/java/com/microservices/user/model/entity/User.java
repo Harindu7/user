@@ -21,6 +21,7 @@ public class User {
     private String email;
     private String companyId;
     private String phoneNumber;
+    private String password;
     private boolean active = true;
     private LocalDateTime createdAt;
 

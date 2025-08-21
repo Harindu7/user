@@ -28,10 +28,7 @@ public class UserController {
         summary = "Create a new user",
         description = "Creates a new user with the provided information"
     )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "User successfully created"),
-        @ApiResponse(responseCode = "400", description = "Invalid input provided")
-    })
+
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
         User createdUser = userService.createUser(userDTO);
@@ -39,11 +36,6 @@ public class UserController {
     }
 
     @Operation(summary = "Update an existing user")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "User successfully updated"),
-        @ApiResponse(responseCode = "404", description = "User not found"),
-        @ApiResponse(responseCode = "400", description = "Invalid input provided")
-    })
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
         User updatedUser = userService.updateUser(id, userDTO);

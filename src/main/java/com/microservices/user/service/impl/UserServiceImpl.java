@@ -4,10 +4,13 @@ import com.microservices.user.model.dto.UserDTO;
 import com.microservices.user.model.entity.User;
 import com.microservices.user.repository.UserRepository;
 import com.microservices.user.service.UserService;
+import com.microservices.user.util.PasswordHasher;
+import com.microservices.user.util.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final WebClient companyServiceWebClient;
+    private PasswordEncoder passwordEncoder;
 
 
     private void validateCompanyId(String companyId) {
@@ -40,17 +44,26 @@ public class UserServiceImpl implements UserService {
         log.debug("Company validation successful for ID: {}", companyId);
     }
 
+
     @Override
     public User createUser(UserDTO userDTO) {
         log.info("Creating new user with company ID: {}", userDTO.getCompanyId());
         validateCompanyId(userDTO.getCompanyId());
+        if (!PasswordValidator.isValid(userDTO.getPassword())) {
+            throw new IllegalArgumentException("Password does not meet security policy requirements.");
+        }
+
 
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
+
+        user.setPassword(PasswordHasher.hash(userDTO.getPassword()));
+
         User savedUser = userRepository.save(user);
         log.info("Successfully created user with ID: {}", savedUser.getId());
         return savedUser;
     }
+
 
     @Override
     public User updateUser(String id, UserDTO userDTO) {
