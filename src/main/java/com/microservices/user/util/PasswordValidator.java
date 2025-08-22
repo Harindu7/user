@@ -1,6 +1,7 @@
 package com.microservices.user.util;
 
 import com.microservices.user.constants.RegexConstants;
+
 import java.util.regex.Pattern;
 
 public class PasswordValidator {
