@@ -12,3 +12,10 @@ server:
 services:
   company-service:
     url: ${COMPANY_SERVICE_URL:http://company-service:8081}
+
+mongock:
+  migration-scan-package:
+    - com.microservices.company.migrations
+  fail-fast: true
+  change-log-collection-name: mongockChangeLog
+  lock-collection-name: mongockLock
