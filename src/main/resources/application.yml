@@ -19,3 +19,6 @@ mongock:
   fail-fast: true
   change-log-collection-name: mongockChangeLog
   lock-collection-name: mongockLock
+
+github:
+  webhook-secret: ${GITHUB_WEBHOOK_SECRET:my-webhook-secret-key}
