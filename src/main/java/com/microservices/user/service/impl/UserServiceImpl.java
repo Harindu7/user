@@ -1,8 +1,10 @@
 package com.microservices.user.service.impl;
 
+import com.microservices.user.model.dto.UserCreatedEventDTO;
 import com.microservices.user.model.dto.UserDTO;
 import com.microservices.user.model.entity.User;
 import com.microservices.user.repository.UserRepository;
+import com.microservices.user.service.KafkaProducerService;
 import com.microservices.user.service.UserService;
 import com.microservices.user.util.PasswordHasher;
 import com.microservices.user.util.PasswordValidator;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final WebClient companyServiceWebClient;
-    private PasswordEncoder passwordEncoder;
+    private final KafkaProducerService kafkaProducerService;
 
 
     private void validateCompanyId(String companyId) {
@@ -60,6 +62,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(PasswordHasher.hash(userDTO.getPassword()));
 
         User savedUser = userRepository.save(user);
+        UserCreatedEventDTO event = new UserCreatedEventDTO(savedUser.getId(), savedUser.getCompanyId());
+        kafkaProducerService.sendEvent("user-created-topic", event);
         log.info("Successfully created user with ID: {}", savedUser.getId());
         return savedUser;
     }

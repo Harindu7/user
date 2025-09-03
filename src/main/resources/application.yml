@@ -5,20 +5,22 @@ spring:
       auto-index-creation: ${MONGO_AUTO_INDEX:true}
   application:
     name: ${APP_NAME:user-service}
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server:
   port: ${SERVER_PORT:8080}
 
 services:
   company-service:
-    url: ${COMPANY_SERVICE_URL:http://company-service:8081}
+    url: ${COMPANY_SERVICE_URL:http://localhost:8081}  # local URL for company service
 
 mongock:
   migration-scan-package:
-    - com.microservices.company.migrations
+    - com.microservices.user.migrations   # User Service migrations package
   fail-fast: true
   change-log-collection-name: mongockChangeLog
   lock-collection-name: mongockLock
-
-github:
-  webhook-secret: ${GITHUB_WEBHOOK_SECRET:my-webhook-secret-key}
