@@ -25,12 +25,3 @@ mongock:
   change-log-collection-name: mongockChangeLog
   lock-collection-name: mongockLock
 
-
-# Twilio Configuration
-twilio:
-  account:
-    sid: ${TWILIO_ACCOUNT_SID:}
-  auth:
-    token: ${TWILIO_AUTH_TOKEN:}
-  from:
-    phone: ${TWILIO_FROM_PHONE:}
